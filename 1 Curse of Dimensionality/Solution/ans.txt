@@ -1,0 +1,17 @@
+# Nikhil Kamthe
+# 861245635
+# 09/28/2016
+# CS 229
+# PS 1
+
+part b:
+
+The figure 2.26 and the formula 2.24 talk about the curse of dimensionality. Looking at the figure or using the formula we can say that when we increase the number of dimensions, the distance between origin and the closest point increases and when we increase the number of data points, this distance decreases. In simple words, when we increase the number of features (dimensions) for fixed set of data points, the volume spanned by these features in space increases. This makes the data points sparse i.e. the distance between the data points increases. Also when we increase the number of data points keeping the number of dimensions constant, the distance between the data points decreases as the points are more densely packed in the space.
+
+The plot drawn in part a shows that when we increase the dimensions for a fixed dataset, the average mean distance between the points increases as the same number of data points are now sparsely distributed in space spanned by these dimensions. When we increase the number of data points keeping the number of dimensions constant, the average mean distance between the points decreases as the more number of data points are now packed in the same space which makes the data points dense.
+
+Avearge distance to another point is a good measure for the class separability. It is also used in a number of hierarchical clustering algorithms.
+
+part d:
+
+Identity covariance matrix implies that the features (dimensions) are independent (not correlated). Making the off diagonal elements of covariance matrix non-zero i.e. 0.8, increases the correlation between the features. As the correlation between the features increases the amount of information provided by these features decreases. This explains the fact that as you increase the correlation between the features, the new curve shifts towards the curve with less number of features (downwards).

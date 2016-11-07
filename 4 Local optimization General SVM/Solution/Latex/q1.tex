@@ -1,0 +1,129 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,amsthm,algorithm}
+\usepackage{graphicx}
+\usepackage[noend]{algpseudocode}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\setlength{\headheight}{13.6pt}
+
+\begin{document}
+\begin{itemize}
+	\item Nikhil Kamthe
+	\item 861245635
+	\item 10/29/2016
+	\item CS 229
+	\item PS 4
+\end{itemize}
+\hrulefill
+
+\textbf{Solution(part a):} Let $\alpha_{i}'$ and $\alpha_{j}'$ be the new values of $\alpha_{i}$ and $\alpha_{j}$ respectively. In order to satisfy the constraint $\sum_{i}^{} \alpha_{i}y_{i} = 0$, we have to keep the sum of $\alpha_{i}y_{i} + \alpha_{j}y_{j}$ same as before. Which leads us to the following equation. Note that value of $y_{i}$ can be either -1 or +1.
+\begin{align*}
+\alpha_{i}'y_{i} + \alpha_{j}'y_{j} &= \alpha_{i}y_{i} + \alpha_{j}y_{j}\\
+\alpha_{j}'y_{j} &= \alpha_{i}y_{i} + \alpha_{j}y_{j} - \alpha_{i}'y_{i}\\
+\alpha_{j}'y_{j}y_{j} &= \alpha_{i}y_{i}y_{j} + \alpha_{j}y_{j}y_{j} - \alpha_{i}'y_{i}y_{j}\\
+\alpha_{j}' &= \alpha_{i}y_{i}y_{j} + \alpha_{j} - \alpha_{i}'y_{i}y_{j} && \text{as } y_{j}y_{j} = 1\\
+\alpha_{j}' &= \alpha_{j} + y_{i}y_{j} (\alpha_{i} - \alpha_{i}')\\
+\mathbf\alpha_{j}' &= \alpha_{j} + h (\alpha_{i} - \alpha_{i}') && \text{where } h = y_{i}y_{j}
+\end{align*}
+Let $L$ be the lower bound and $U$ be the upper bound for $\alpha_{i}'$\\\\
+\textbf{Case(I):} $h = 1$,\\
+$\therefore \alpha_{i}' + \alpha_{j}' = k_{1}$, where $k_{1}$ is a constant.
+\begin{itemize}
+	\item If $k_{1} > C$, then max $\alpha_{i} = C$ and min $ \alpha_{i} = k_{1}-C$
+	\item If $k_{1} < C$, then min $\alpha_{i} = k_{1}$ and max $ \alpha_{i} = 0$
+\end{itemize}
+\begin{align*}
+L &= max(0,\alpha_{i}+\alpha_{j}-C)\\
+U &= min(C,\alpha_{i}+\alpha_{j})
+\end{align*}
+\textbf{Case(II):} $h = -1$,\\
+$\therefore \alpha_{j}' - \alpha_{i}' = k_{2}$, where $k_{2}$ is a constant.
+\begin{itemize}
+	\item If $k_{2} > 0$, then max $\alpha_{i}'=0$, and min $\alpha_{i}' = C - k_{2}$.
+	\item If $k_{2} < C$, then min $\alpha_{i}' = -k_{2}$ and max $\alpha_{i}' = C$
+\end{itemize}
+\begin{align*}
+L &= max(0,\alpha_{i}-\alpha_{j})\\
+U &= min(C,C+\alpha_{i}-\alpha_{j})
+\end{align*}
+Thus we now have to restrict $\alpha_{i}$ within its range i.e. $[L,U]$
+\begin{itemize}
+	\item $\alpha_{i}' = L$, if $\alpha_{i} < L$
+	\item $\alpha_{i}' = H$, if $\alpha_{i} > H$
+	\item $\alpha_{i}' = \alpha_{i}'$ (The value which we will compute)
+\end{itemize}
+
+\newpage
+
+\textbf{Solution(part b):} Let $f$ be the objective function for the dual formulation for support vector machine.
+\begin{align*}
+f &= - \frac{1}{2} \alpha^T G \alpha + \alpha^T 1
+\end{align*}
+In order to find the extremum (maximum or minimum) of the objective with respect to $\alpha_{i}$, we find the derivative of our objective function with respect to $\alpha_{i}$ and equate it to zero.
+\begin{align*}
+\frac{df}{d\alpha_{i}} &= 0\\
+\frac{d}{d\alpha_{i}} (-\frac{1}{2} \alpha^T G \alpha + \alpha^T 1) &= 0\\
+\frac{d}{d\alpha_{i}} (-\frac{1}{2} \alpha^T G \alpha) + \frac{d}{d\alpha_{i}}\alpha^T 1 &= 0\\
+\frac{da}{d\alpha_{i}} \frac{d}{da}(-\frac{1}{2} \alpha^T G \alpha) + \frac{da}{d\alpha_{i}}\alpha^T 1 &= 0 && \\
+\frac{da}{d\alpha_{i}} (\frac{d}{da}(-\frac{1}{2} \alpha^T G \alpha)) + \frac{d}{d\alpha_{i}}(\alpha^T 1 ) &= 0\\
+\begin{bmatrix}	1&-h \end{bmatrix} (\frac{d}{da}(-\frac{1}{2} (a^THa + \tilde{a}^Tqa + a^Tq^T\tilde{a} + \tilde{a}^T\tilde{H} \tilde{a}))) + (1-h) &= 0 \\
+\begin{bmatrix}	1&-h \end{bmatrix} (-\frac{1}{2} (2Ha + q^T\tilde{a} + q^T\tilde{a} + 0)) + (1-h) &= 0\\
+-\begin{bmatrix} 1&-h \end{bmatrix} (Ha+q^T\tilde{a}) + (1-h) &= 0 && \mathbf{...(i)}\\
+\begin{bmatrix}	1&-h \end{bmatrix} (Ha) &= (1-h) - [1 -h](q^T\tilde{a})\\
+\begin{bmatrix}	1&-h \end{bmatrix} \begin{bmatrix}	G_{ii}&G_{ij}\\G_{ji}&G_{jj} \\  \end{bmatrix} \begin{bmatrix}	\alpha_{i}'&\alpha_{j}' \end{bmatrix} &= (1-h) - [1 -h](q^T\tilde{a})\\
+\begin{bmatrix}	G_{ii}-hG_{ji}&G_{ij}-hG_{jj} \end{bmatrix} \begin{bmatrix}	\alpha_{i}'\\ \alpha_{j}+s\alpha_{i} -s\alpha_{i}' \end{bmatrix} &= (1-h) - [1 -h](q^T\tilde{a})\\
+G_{ii}\alpha_{i}'-hG_{ji}\alpha_{i}'+G_{ij}\alpha_{j}+hG_{ij}\alpha_{i}-sG_{ij}\alpha_{i}'-sG_{jj}\alpha_{j} - G_{jj}\alpha_{i} +G_{jj}\alpha_{i}' &= (1-h) - [1 -h](q^T\tilde{a})\\
+\alpha_{i}'(G_{ii}-hG_{ji}-hG_{ij}+G_{jj}) + (\alpha_{j}+h\alpha_{i}) (G_{ij}-hG_{jj}) &= (1-h) - [1 -h](q^T\tilde{a}) && \mathbf{...(ii)}\\
+\boxed{\alpha_{i}' = \frac{1-h - [1 -h](q^T\tilde{a}) - (\alpha_{j}+h\alpha_{i}) (G_{ij}-hG_{jj})}{(G_{ii}-hG_{ji}-hG_{ij}+G_{jj})}}\\
+\end{align*}
+Checking if its a maxima:
+\begin{align*}
+\frac{d^2f}{d\alpha_{i}'^2} &< 0\\
+\frac{d^2}{d\alpha_{i}'^2} (-\frac{1}{2} \alpha^T G \alpha + \alpha^T 1) &< 0\\
+\frac{d}{d\alpha_{i}'} (-\begin{bmatrix} 1&-h \end{bmatrix} (Ha+q^T\tilde{a}) + (1-h)) &< 0 && \text{using $(i)$}\\
+\frac{d}{d\alpha_{i}'}-(\alpha_{i}'(G_{ii}-hG_{ji}-hG_{ij}+G_{jj}) + (\alpha_{j}+h\alpha_{i}) (G_{ij}-hG_{jj})) + (1-h) - [1 -h](q^T\tilde{a}) &< 0 && \text{using $(ii)$}\\
+G_{ii}-hG_{ji}-hG_{ij}+G_{jj} &> 0\\
+\end{align*}
+
+\newpage
+
+\textbf{Solution(part c):}
+
+\begin{algorithm}
+	\caption{Local optimization General SVM}\label{euclid}
+	\begin{algorithmic}[1]
+		\Procedure{update}{i,j}
+		\State $h \gets y_{i}y_{j}$;
+		\State $[L,U] \gets \Call {fetchBounds}$;
+		\If {$\Call {checkIfMaxima}$} \Comment Using second derivative to check if its a maxima
+		\State $\alpha_{i}' = \Call {computeAlpha}$;
+			\If {$\alpha_{i}' < L$}
+			\State {$\alpha_{i}' \gets L$};
+			\Else
+			\State {$\alpha_{i}' \gets U$};
+			\EndIf
+		\Else
+		\State $Lobjective = \Call {computeObjective}{L}$;
+		\State $Uobjective = \Call {computeObjective}{U}$;
+			\If {$Lobjective > Uobjective$}
+			\State {$\alpha_{i}' \gets L$};
+			\Else
+			\State {$\alpha_{i}' \gets U$};
+			\EndIf
+		\EndIf
+		\If {$abs(\alpha_{i}-\alpha_{i}') > 10^{-10}(\alpha_{i}+\alpha_{i}'+10^{-10})$}
+		\State {$\alpha_{j}' \gets \alpha_{j}+h(\alpha_{i}-\alpha_{i}')$};
+		\State $\alpha = \Call {updateAlpha}{\alpha_{i}'}$;
+		\State $b = \Call {updateIntercept}$;
+		\State {$nch \gets 1$};
+		\Else
+		\State {$nch \gets 0$};
+		\EndIf
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+
+\end{document}

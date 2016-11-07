@@ -4,11 +4,23 @@ function explot(trainX,trainY)
 % It isn't useful, but demonstrates how to use plotclassifier
 
 
-w = randn(2,1);
-w = w/sqrt(w'*w);
-b = rand(1,1)*2-1;
-plotclassifier(trainX,trainY,@(X) myclassifier(X,w,b));
+C = 0.1;
 
+c=1;
+d=2;
 
-function Y = myclassifier(X,w,b)
-	Y = X*w + b;
+[alpha,b] = learnsvm(trainX,trainY,C,@(A,B) quadraticKernel(A,B,c,d));
+
+plotclassifier(trainX,trainY,@(X) testQuadraticKernel(X,trainX,trainY,alpha,b,c,d));
+
+end
+
+function Y = testQuadraticKernel(newX,trainX,trainY,alpha,b,c,d)
+    
+    m = trainY.*alpha;
+    Y = quadraticKernel(newX,trainX,c,d)*m + b;
+end
+
+function Y = quadraticKernel(A,B,c,d)
+    Y = (A*B' + c).^d;
+end

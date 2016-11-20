@@ -1,0 +1,12 @@
+In part a plots, we can clearly see that as we increase the depth the quality of classifier improves. Also, as we increase the number of trees the quality of classifier goes up. This is due to the fact that, where some classifier may fail to predict the correct value at a point, others might do well which improves the overall quality.
+
+Similarly in part b plots, increasing depth or number of trees increases the quality of the classifier. But in this case the quality of predictions is even better than the first one. This is due to the fact that individual data points have weight associated with them which helps in better prediction for individual points.
+
+Part c plots explains the effect of bagging and boosting on bias and variance. It is evident from the plots that bagging improves the variance whereas boosting improves bias of the underlying classifier. Detail explaination has been provided below (in the last part of  the question).
+
+Bias and Variance:
+In bagging we essentially take an average of all the classifiers generated using the bootstrap data in order to predict the output. Thus bagging doesnt affect the bias (in theory) but reduces the variance. Whereas boosting decreases the bias but increase variance which can be seen in the plots for part a and part b.
+
+In part c first plot, the difference between the training error and the testing error for fixed number of trees is low which suggests that bagging improves the variance of the underlying classifier. Also, as we increase the number of trees the error rate goes down (immproves quality of prediction).
+
+In part c second plot, the difference between the training error and the testing error for fixed number of trees is relatively high which suggests that boosting increases the variance. But As we increase the number of trees, the error rate quickly goes down to zero which suggest that boosting improves the bias of the underlying classifier. Also, as we increase the number of trees the error rate goes down (immproves quality of prediction).

@@ -1,0 +1,102 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,amsthm,algorithm}
+\usepackage{graphicx}
+\usepackage[noend]{algpseudocode}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\setlength{\headheight}{13.6pt}
+
+\begin{document}
+\begin{itemize}
+	\item Nikhil Kamthe
+	\item 861245635
+	\item 11/24/2016
+	\item CS 229
+	\item PS 7
+\end{itemize}
+\hrulefill
+
+\textbf{Solution(part a):} The negative binomial distribution described the number of “successes” before $r$ “failures” if the probability of success is $q$:
+\begin{align*}
+p(y) &= {y+r-1 \choose y}q^y (1-q)^r\\
+p(y) &= {y+r-1 \choose y} \exp{(y~log(q) + r~log(1-q))}\\
+\end{align*}
+Consider
+\begin{align*}
+log(q) &= \theta\\
+q &= e^{\theta}\\
+1-q &= 1-e^{\theta}
+\end{align*}
+Therefore,
+\begin{align*}
+p(y) &= {y+r-1 \choose y} \exp{(y\theta + r~log(1-e^{\theta}))}
+\end{align*}
+Comparing with equation for exponential family,
+\begin{align*}
+\phi(y) &= y\\
+\theta &= log(q)\\
+A(\theta) &= -r~log(1-e^{\theta})\\
+h(y) &= {y+r-1 \choose y}\\
+Z(\theta) &= e^{-r~log(1-e^{\theta})}
+\end{align*}
+
+\newpage
+\textbf{Solution(part b):}
+\begin{align*}
+E(y|x) &= \frac{d}{d\theta}(A(\theta))\\
+\mu &= \frac{-r}{1-e^{\theta}}(-e^{\theta})\\
+\mu &= \frac{re^{\theta}}{1-e^\theta}\\
+\frac{\mu}{r} &= \frac{e^{\theta}}{1-e^\theta}\\
+\frac{r}{\mu} &= \frac{1-e^\theta}{e^{\theta}}\\
+\frac{r}{\mu} &= \frac{1}{e^{\theta}}-1\\
+\frac{1}{e^{\theta}} &= \frac{r}{\mu} + 1\\
+e^{-\theta} &= \frac{r+\mu}{\mu}\\
+\theta &= log(\frac{\mu}{r+\mu})\\
+\psi(\mu) &= log(\frac{\mu}{r+\mu})
+\end{align*}
+Using cononical link function: $g=\psi$
+\begin{align*}
+\therefore g(\mu) &= log(\frac{\mu}{r+\mu})
+\end{align*}
+as $g=\psi$,
+\begin{align*}
+\theta &= x^Tw
+\end{align*}
+Using results from part a,
+\begin{align*}
+log(q) &= x^Tw\\
+q &= e^{x^Tw}
+\end{align*}
+
+\newpage
+\textbf{Solution(part c):} Loss function in case a canonical link function can be given as as follows:
+\begin{align*}
+L(w) = \frac{1}{\sigma^2} \sum_{i}^{}(x_i^Twy_i-A(x_i^Tw))
+\end{align*}
+Gradient:
+\begin{align*}
+\bigtriangledown_wL(w) &= \frac{1}{\sigma^2} \bigtriangledown_w (\sum_{i}^{}(x_i^Twy_i-A(x_i^Tw)))\\
+&= \frac{1}{\sigma^2} \bigtriangledown_w (\sum_{i}^{}(x_i^Twy_i+rlog(1-e^{x_i^Tw})))\\
+&= \frac{1}{\sigma^2} \sum_{i}^{}(x_iy_i + x_i(rlog(1-e^{x_i^Tw})))\\
+&= \frac{1}{\sigma^2} YX - \mu X\\
+&= \frac{1}{\sigma^2} (Y - \mu) X
+\end{align*}
+Hessian:
+\begin{align*}
+\bigtriangledown \bigtriangledown_wL(w) &= \bigtriangledown (\frac{1}{\sigma^2} (Y - \mu) X)\\
+&= \frac{1}{\sigma^2} \frac{d}{dw}((Y-\mu)X)\\
+&= -\frac{1}{\sigma^2} \frac{d}{dw}(\mu X)\\
+&= -\frac{1}{\sigma^2} \frac{d\mu}{dw} \frac{d}{d\mu}(\mu X)\\
+&= -\frac{1}{\sigma^2} \frac{d\mu}{dw} X^T\\
+&= -\frac{1}{\sigma^2} \frac{d\theta}{dw}\frac{d\mu}{d\theta} X^T\\
+&= -\frac{1}{\sigma^2} X\frac{d\mu}{d\theta} X^T\\
+&= -\frac{1}{\sigma^2} X\mu' X^T & \text{where } \mu' = \frac{d\mu}{d\theta}
+\end{align*}
+Update rule:
+\begin{align*}
+w_{new} &= w_{old} - \frac{\bigtriangledown_wL}{\bigtriangledown \bigtriangledown_wL}\\
+w_{new} &= w_{old} + (X\mu' X^T)^{-1} (Y-\mu)X
+\end{align*}
+\end{document}
